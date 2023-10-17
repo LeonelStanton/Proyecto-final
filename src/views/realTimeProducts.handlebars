@@ -1,0 +1,66 @@
+
+
+<h1>Productos Disponibles</h1>
+<div id="renderProducts">
+ 
+</div>
+
+<h2>Agregar Producto</h2>
+
+<form id="form-add" action="/realtimeproducts" method="POST">
+
+  <!-- Grid -->
+  <div class="grid">
+
+    <!-- Markup example 1: input is inside label -->
+    
+      <input type="text" id="title" name="title" placeholder="title" required>
+   
+
+   
+      <input type="text" id="description" name="description" placeholder="description" required>
+   
+
+
+
+  <!-- Markup example 2: input is after label -->
+  
+
+    <!-- Markup example 1: input is inside label -->
+    
+      <input type="text" id="code" name="code" placeholder="code" required>
+   
+
+  
+      <input type="text" id="price" name="price" placeholder="price" required>
+  
+
+ 
+   
+
+    <!-- Markup example 1: input is inside label -->
+    
+      <input type="text" id="stock" name="stock" placeholder="stock" required>
+   
+
+   
+      <input type="text" id="category" name="category" placeholder="category" required>
+   <input type="text" id="status" name="status" placeholder="status" >
+
+  </div>
+
+
+  <!-- Button -->
+  <button type="submit">Crear</button>
+</form>
+  <hr>
+<h2>Borrar Producto</h2>
+<form id="form-delete">
+<input type="text" name="id" id="idToDelete" placeholder="id">
+<button type="submit" >Borrar</button>
+</form>
+<hr>
+
+
+<script src="/socket.io/socket.io.js"></script>
+<script src="/js/index.js"></script>

@@ -1,15 +1,21 @@
 import express from 'express'
+import {__dirname} from './utils.js'
+import handlebars from 'express-handlebars'
+import path from 'path';
 import productsRouter from './routers/products.router.js'
 import cartRouter from './routers/carts.router.js'
+import indexRouter from './routers/index.router.js'
 
 const app = express();
-const PORT=8080;
+
+
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }));
+app.use(express.static(path.join(__dirname,'../public')))
+app.engine('handlebars', handlebars.engine())
+app.set('views', path.join(__dirname, 'views'))
+app.set('view engine', 'handlebars')
+app.use('/', productsRouter, cartRouter, indexRouter)
 
-app.use('/api', productsRouter, cartRouter)
+export default app;
 
-
-app.listen(PORT,()=>{
-    console.log(`Server is running in ${PORT}`)
-})

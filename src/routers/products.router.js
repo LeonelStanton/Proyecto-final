@@ -1,39 +1,18 @@
 import { Router } from "express";
 import { v4 as uuidv4 } from "uuid";
-import * as fs from "fs";
+import { emitFromApi} from '../socket.js'
+import {getProducts, saveProducts} from '../utils.js'
 
 const router = Router();
-const PATH = "./src//db/productos.json";
 
-function getProducts() {
-  try {
-    if (fs.existsSync(PATH)) {
-      const content = fs.readFileSync(PATH, "utf-8");
-      return JSON.parse(content);
-    } else {
-      return [];
-    }
-  } catch (error) {
-    console.error(`Error en getProducts: ${error.message}`);
-    throw error;
-  }
-}
-function saveProducts(products) {
-  const newArray = JSON.stringify(products, null, 2);
-  try {
-    fs.writeFileSync(PATH, newArray, "utf-8");
-  } catch (writeError) {
-    console.error(`Error al escribir en el archivo: ${writeError.message}`);
-    throw writeError;
-  }
-}
 
 router.get("/products", (req, res) => {
   try {
     const { limit } = req.query;
     const products = getProducts();
     if (!limit) {
-      res.status(200).json(products);
+     res.status(200).json(products);
+ 
     } else {
       const limitValue = parseInt(limit);
       if (!isNaN(limitValue)) {
@@ -55,6 +34,8 @@ router.get("/products", (req, res) => {
       .json({ status: "error", message: "Error interno al obtener productos" });
   }
 });
+
+
 
 router.get("/products/:pid", (req, res) => {
   try {
@@ -79,6 +60,7 @@ router.get("/products/:pid", (req, res) => {
       });
   }
 });
+
 
 router.post("/products", (req, res) => {
   try {

@@ -1,0 +1,15 @@
+<div>
+    {{#if products}}
+    <h1 class="title">Productos</h1>
+    {{#each products}}
+     <article>
+      <h2>{{this.title}}</h2>
+      <p><b>Description:</b> {{this.description}}</p>
+      <p><b>Price:</b> {{this.price}}</p>
+      <p><b>Stock:</b> {{this.stock}}</p>
+    </article>
+    {{/each}}
+    {{else}}
+    <h1>No agregaste productos</h1>
+    {{/if}}
+</div>
