@@ -38,7 +38,7 @@ export const init = (httpServer) => {
       }
       products.push(newProduct);
       saveProducts(products);
-      res.status(201).json({ status: "success", message: "Producto creado" });
+      
       io.emit("actual-products", { products });
     });
     socketClient.on("delete-product",(id)=>{
@@ -49,7 +49,7 @@ export const init = (httpServer) => {
     }
     products.splice(productIndex, 1);
     saveProducts(products);
-    res.status(200).json({ status: "success", message: "Producto Eliminado" });
+   
     io.emit("actual-products", { products });
     })
   });

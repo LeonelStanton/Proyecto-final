@@ -7,8 +7,8 @@ export const __dirname = path.dirname(__filename)
 
 export function getProducts() {
     try {
-      if (fs.existsSync("./src//db/productos.json")) {
-        const content = fs.readFileSync("./src//db/productos.json", "utf-8");
+      if (fs.existsSync("./src/db/productos.json")) {
+        const content = fs.readFileSync("./src/db/productos.json", "utf-8");
         return JSON.parse(content);
       } else {
         return [];
@@ -22,7 +22,7 @@ export function getProducts() {
   export function saveProducts(products) {
     const newArray = JSON.stringify(products, null, 2);
     try {
-      fs.writeFileSync("./src//db/productos.json", newArray, "utf-8");
+      fs.writeFileSync("./src/db/productos.json", newArray, "utf-8");
     } catch (writeError) {
       console.error(`Error al escribir en el archivo: ${writeError.message}`);
       throw writeError;
