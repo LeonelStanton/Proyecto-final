@@ -8,15 +8,5 @@
     "stock": 25,
     "category": "abc",
     "status": true
-  },
-  {
-    "id": "aeb11369-26ba-4abb-90ee-7a542aba0a7f",
-    "title": "producto prueba",
-    "description": "Este es un producto prueba",
-    "code": "a",
-    "price": 200,
-    "stock": 25,
-    "category": "abc",
-    "status": true
   }
 ]

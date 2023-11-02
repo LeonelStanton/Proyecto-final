@@ -28,3 +28,10 @@ export function getProducts() {
       throw writeError;
     }
   }
+
+  export class Exception extends Error {
+    constructor(message, status) {
+      super(message);
+      this.statusCode = status;
+    }
+  };

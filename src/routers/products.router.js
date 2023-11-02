@@ -1,12 +1,21 @@
 import { Router } from "express";
 import { v4 as uuidv4 } from "uuid";
-import { emitFromApi} from '../socket.js'
+import ProductManager from '../dao/ProductManager.js';
 import {getProducts, saveProducts} from '../utils.js'
 
 const router = Router();
 
 
-router.get("/products", (req, res) => {
+router.get("/products", async (req, res) => {
+
+  try {
+    
+    const products = await ProductManager.get();
+    res.status(200).render("index", { products: products })
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+/*
   try {
     const { limit } = req.query;
     const products = getProducts();
@@ -33,12 +42,26 @@ router.get("/products", (req, res) => {
       .status(500)
       .json({ status: "error", message: "Error interno al obtener productos" });
   }
+*/
+
 });
 
 
 
-router.get("/products/:pid", (req, res) => {
+router.get("/products/:pid",async (req, res) => {
+ 
   try {
+    const { params: { pid } } = req;
+   
+    const product = await ProductManager.getById(pid);
+    res.status(200).json(product);
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+
+
+ /* try {
+
     const { pid } = req.params;
     const products = getProducts();
     const foundProduct = products.find((product) => product.id === pid);
@@ -59,10 +82,20 @@ router.get("/products/:pid", (req, res) => {
         message: "Error interno al buscar el producto",
       });
   }
+  */
 });
 
 
-router.post("/products", (req, res) => {
+router.post("/products", async (req, res) => {
+
+  try {
+    const { body } = req;
+    const product = await ProductManager.create(body);
+    res.status(201).json({ status: "success", message: "Producto creado" });
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+  /*
   try {
     const { title, description, code, price, stock, category, thumbnails } =
       req.body;
@@ -106,9 +139,19 @@ router.post("/products", (req, res) => {
         message: "Se produjo un error interno al crear el producto.",
       });
   }
+  */
 });
 
-router.put("/products/:pid", (req, res) => {
+router.put("/products/:pid", async (req, res) => {
+
+  try {
+    const { params: { pid }, body } = req;
+    await ProductManager.updateById(pid, body);
+    res.status(204).json({ status: "success", message: "Producto actualizado" });;
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+  /*
   const { pid } = req.params;
   const products = getProducts();
   const { title, description, code, price, stock, category, thumbnails } =
@@ -159,9 +202,18 @@ router.put("/products/:pid", (req, res) => {
         message: "Se produjo un error al actualizar el producto",
       });
   }
+  */
 });
 
-router.delete("/products/:pid", (req, res) => {
+router.delete("/products/:pid", async (req, res) => {
+  try {
+    const { params: { pid } } = req;
+    await ProductManager.deleteById(pid);
+    res.status(204).json({ status: "success", message: "Producto Eliminado" });
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+  /*
   try {
     const { pid } = req.params;
     const products = getProducts();
@@ -184,6 +236,7 @@ router.delete("/products/:pid", (req, res) => {
         message: "Se produjo un error interno al eliminar el producto",
       });
   }
+  */
 });
 
 export default router;

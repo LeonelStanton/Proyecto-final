@@ -1,60 +1,46 @@
 import { Server } from "socket.io";
-import { getProducts, saveProducts } from "./utils.js";
-import { v4 as uuidv4 } from "uuid";
+import MessageManager from "./dao/MessageManager.js";
+import ProductManager from "./dao/ProductManager.js";
+
 let io;
 
 export const init = (httpServer) => {
   io = new Server(httpServer);
 
-  io.on("connection", (socketClient) => {
+  io.on("connection", async (socketClient) => {
     console.log(`Se ha conectado un nuevo cliente (${socketClient.id})`);
 
-    const products = getProducts();
-    socketClient.emit("actual-products", { products });
-    socketClient.on("add-product", (product) => {
-      const {
-        title,
-        description,
-        code,
-        price,
-        stock,
-        category,
-        thumbnails,
-        status,
-      } = product;
-      const newProduct = {
-        id: uuidv4(),
-        title,
-        description,
-        code,
-        price: parseFloat(price),
-        stock: parseInt(stock),
-        category,
-        status,
-      };
+    try {
+      const messages = await MessageManager.get();
 
-      if (thumbnails) {
-        newProduct.thumbnails = thumbnails;
-      }
-      products.push(newProduct);
-      saveProducts(products);
-      
+      socketClient.emit("notification", { messages });
+    } catch (error) {
+      console.error("Error al obtener mensajes:", error);
+    }
+
+    socketClient.broadcast.emit("new-client");
+
+    socketClient.on("new-message", async (data) => {
+      await MessageManager.create(data);
+      const messages = await MessageManager.get();
+      io.emit("notification", { messages });
+    });
+
+    const products = await ProductManager.get();
+    socketClient.emit("actual-products", { products });
+    socketClient.on("add-product", async (data) => {
+      await ProductManager.create(data);
+      const products = await ProductManager.get();
       io.emit("actual-products", { products });
     });
-    socketClient.on("delete-product",(id)=>{
-    const productIndex = products.findIndex((product) => product.id === id);
+    socketClient.on("delete-product", async (id) => {
+      await ProductManager.deleteById(id);
+      const products = await ProductManager.get();
 
-    if (productIndex === -1) {
-      return res.status(404).json({ status: "error", message: "Producto no encontrado" });
-    }
-    products.splice(productIndex, 1);
-    saveProducts(products);
-   
-    io.emit("actual-products", { products });
-    })
+      io.emit("actual-products", { products });
+    });
   });
   console.log("Server socket running 🚀");
 };
 
-export const emitFromApi = (event, data) => io.emit(event, data);
-export const onFromApi = (event, data) => io.on(event, data);
+

@@ -1,36 +1,20 @@
 import { Router } from "express";
-import { emitFromApi} from '../socket.js'
-import {getProducts, saveProducts} from '../utils.js'
+import ProductManager from "../dao/ProductManager.js";
 
 const router = Router();
 
+router.get("/", async (req, res) => {
+  try {
+    const products = await ProductManager.get();
+    res.status(200).render("index", { products });
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+});
 
-router.get("/", (req, res) => {
-   
-      
-      const products = getProducts();
-     
-       
-        res.status(200).render("index",{products} )
-  
-  });
+router.get("/realtimeproducts", (req, res) => {
+  res.status(200).render("realTimeProducts");
+});
 
-router.get("/realtimeproducts",(req,res)=>{
-    res.status(200).render("realTimeProducts");
-  
-   
-  })
-  
-  router.post("/realtimeproducts",(req,res)=>{
-    const products = getProducts();
-   emitFromApi.emit('actual-products', { products });
-  
-  })
-  
-  
-  router.delete("/realtimeproducts",(req,res)=>{
-    const products = getProducts();
-    emitFromApi.emit('actual-products', { products });
-  })
 
-  export default router
+export default router;

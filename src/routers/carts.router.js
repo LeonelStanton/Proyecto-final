@@ -1,34 +1,22 @@
 import { Router } from "express";
 import { v4 as uuidv4 } from "uuid";
 import * as fs from "fs";
+import CartManager from '../dao/CartManager.js';
 
 const router = Router();
-const PATH = "./src//db/carrito.json";
 
-function getCarts() {
+router.get("/carts/:cid", async (req, res) => {
+
   try {
-    if (fs.existsSync(PATH)) {
-      const content = fs.readFileSync(PATH, "utf-8");
-      return JSON.parse(content);
-    } else {
-      return [];
-    }
+    const { params: { cid } } = req;
+
+    const cart = await CartManager.getById(cid);
+    res.status(200).json(cart.products);
   } catch (error) {
-    console.error(`Error en getCarts: ${error.message}`);
-    throw error;
+    res.status(error.statusCode || 500).json({ message: error.message });
   }
-}
-function saveCarts(carts) {
-  const newArray = JSON.stringify(carts, null, 2);
-  try {
-    fs.writeFileSync(PATH, newArray, "utf-8");
-  } catch (writeError) {
-    console.error(`Error al escribir en el archivo: ${writeError.message}`);
-    throw writeError;
-  }
-}
 
-router.get("/carts/:cid", (req, res) => {
+  /*
   try {
     const { cid } = req.params;
     const carts = getCarts();
@@ -47,9 +35,17 @@ router.get("/carts/:cid", (req, res) => {
       .status(500)
       .json({ status: "error", message: "Error interno al buscar el carrito" });
   }
+  */
 });
 
-router.post("/carts", (req, res) => {
+router.post("/carts",async (req, res) => {
+  try {
+    const cart = await CartManager.create();
+    res.status(201).json({ status: "success", message: "Carrito creado" });
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+  /*
   try {
     const carts = getCarts();
     const newCart = {
@@ -66,9 +62,18 @@ router.post("/carts", (req, res) => {
       message: "Se produjo un error interno al crear el carrito.",
     });
   }
+  */
 });
 
-router.post("/carts/:cid/product/:pid", (req, res) => {
+router.post("/carts/:cid/product/:pid", async (req, res) => {
+  try {
+    const { cid, pid } = req.params;
+    const response = await CartManager.updateProductByCart(cid, pid);
+    res.status(200).json({ status: "success", message: "El carrito fue actualizado correctamente" });
+  } catch (error) {
+    res.status(error.statusCode || 500).json({ message: error.message });
+  }
+  /*
   try {
     const { cid, pid } = req.params;
     const carts = getCarts();
@@ -101,6 +106,7 @@ router.post("/carts/:cid/product/:pid", (req, res) => {
       .status(500)
       .json({ status: "error", message: "Error interno en el servidor" });
   }
+  */
 });
 
 export default router;

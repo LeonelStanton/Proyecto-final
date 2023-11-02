@@ -5,6 +5,7 @@ import path from 'path';
 import productsRouter from './routers/products.router.js'
 import cartRouter from './routers/carts.router.js'
 import indexRouter from './routers/index.router.js'
+import chatRouter from './routers/chat.router.js'
 
 const app = express();
 
@@ -15,7 +16,9 @@ app.use(express.static(path.join(__dirname,'../public')))
 app.engine('handlebars', handlebars.engine())
 app.set('views', path.join(__dirname, 'views'))
 app.set('view engine', 'handlebars')
-app.use('/', productsRouter, cartRouter, indexRouter)
+app.use('/', indexRouter,chatRouter)
+app.use('/api', productsRouter, cartRouter)
+
 
 export default app;
 

@@ -22,15 +22,16 @@ const inputId = document.getElementById("idToDelete");
     const code = inputCode.value;
     const stock = inputStock.value;
     const category = inputCategory.value;
-    socket.emit('add-product', {
-      title,
-      description,
-      status,
-      price,
-      code,
-      stock,
-      category,
-    });
+    const product = {
+      title:title,
+      description:description,
+      code:code,
+      price:price,
+      stock:stock,
+      category:category,
+      status:status,
+    }
+    socket.emit('add-product', product);
     console.log("Nuevo producto enviado", {
       title,
       description,
@@ -50,7 +51,7 @@ const inputId = document.getElementById("idToDelete");
 
       pDiv.innerHTML = `                      
                             <h3>Title: ${product.title}</h3>
-                            <p>ID: ${product.id}</p>
+                            <p>ID: ${product._id}</p>
                             <p>Description: ${product.description}</p>
                             <p>Status: ${product.status}</p>
                             <p>Price: ${product.price}</p>
