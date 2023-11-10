@@ -2,6 +2,7 @@ import { Router } from "express";
 import { v4 as uuidv4 } from "uuid";
 import ProductManager from '../dao/ProductManager.js';
 import {getProducts, saveProducts} from '../utils.js'
+import ProductModel from "../dao/models/product.model.js";
 
 const router = Router();
 
@@ -10,8 +11,30 @@ router.get("/products", async (req, res) => {
 
   try {
     
-    const products = await ProductManager.get();
-    res.status(200).render("index", { products: products })
+    const { page = 1, limit = 10, category, stock, sort} = req.query;
+    const opts = { page, limit}
+    const criteria = {};
+    if (sort) {
+      opts.sort = { price: sort };
+    }
+    if (category) {
+      criteria.category = category;
+    }
+    else if (stock){
+     criteria.stock = stock;
+    }
+    
+    const result = await ProductModel.paginate(criteria, opts);
+    
+    res.render("products", ({
+      category,
+      limit,
+      stock,
+      sort,
+      ...buildResponse({...result,category,stock,sort})
+    }
+      ));
+
   } catch (error) {
     res.status(error.statusCode || 500).json({ message: error.message });
   }
@@ -46,7 +69,20 @@ router.get("/products", async (req, res) => {
 
 });
 
-
+const buildResponse = (data) => {
+  return {
+    status: 'success',
+    payload: data.docs.map(student => student.toJSON()),
+    totalPages: data.totalPages,
+    prevPage: data.prevPage,
+    nextPage: data.nextPage,
+    page: data.page,
+    hasPrevPage: data.hasPrevPage,
+    hasNextPage: data.hasNextPage,
+    prevLink: data.hasPrevPage ? `http://localhost:8080/api/products?limit=${data.limit}&page=${data.prevPage}${data.category ? `&category=${data.category}` : ''}${data.stock ? `&stock=${data.stock}` : ''}${data.sort ? `&sort=${data.sort}` : ''}` : '',
+    nextLink: data.hasNextPage ? `http://localhost:8080/api/products?limit=${data.limit}&page=${data.nextPage}${data.category ? `&category=${data.category}` : ''}${data.stock ? `&stock=${data.stock}` : ''}${data.sort ? `&sort=${data.sort}` : ''}` : '',
+  };
+};
 
 router.get("/products/:pid",async (req, res) => {
  
@@ -209,7 +245,7 @@ router.delete("/products/:pid", async (req, res) => {
   try {
     const { params: { pid } } = req;
     await ProductManager.deleteById(pid);
-    res.status(204).json({ status: "success", message: "Producto Eliminado" });
+    res.status(201).json({ status: "success", message: "Producto Eliminado" });
   } catch (error) {
     res.status(error.statusCode || 500).json({ message: error.message });
   }

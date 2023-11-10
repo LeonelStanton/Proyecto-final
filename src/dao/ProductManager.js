@@ -1,6 +1,9 @@
 import ProductModel from "./models/product.model.js";
 import { Exception } from "../utils.js";
 
+
+
+
 export default class ProductManager {
   static async get(query = {}) {
     try {
@@ -13,6 +16,7 @@ export default class ProductManager {
   static async getById(productId) {
     try {
       const product = await ProductModel.findById(productId);
+      ProductModel.insertMany(products)
       if (!product) {
         throw new Exception("No existe el producto ", 404);
       }
