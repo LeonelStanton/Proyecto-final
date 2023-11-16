@@ -1,5 +1,21 @@
-<h1>Productos</h1>
+<article>
+  <header>
+    <h1>Bienvenido</h1>
+  </header>
+ {{#if user.isAdmin}}
+    <p id="user-rol">Role: ADMIN ACCOUNT</p>
+{{else}}
+    <p id="user-rol">Role: USER ACCOUNT</p>
+{{/if}}
+  <p>Nombre: {{user.first_name}}</p>
+  <p>Apellido: {{user.last_name}}</p>
+  <p>Correo: {{user.email}}</p>
+  <footer>
+    <a href="/api/sessions/logout" role="button">Logout</a>
+  </footer>
+</article>
 
+<h1>Productos</h1>
 
 <div class="grid">
     <div>

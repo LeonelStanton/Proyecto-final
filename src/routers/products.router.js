@@ -5,9 +5,14 @@ import {getProducts, saveProducts} from '../utils.js'
 import ProductModel from "../dao/models/product.model.js";
 
 const router = Router();
+const privateRouter = (req, res, next) =>{
+  if (!req.session.user) {
+    return res.redirect('/login');
+  }
+  next();
+};
 
-
-router.get("/products", async (req, res) => {
+router.get("/products", privateRouter, async (req, res) => {
 
   try {
     
@@ -27,6 +32,7 @@ router.get("/products", async (req, res) => {
     const result = await ProductModel.paginate(criteria, opts);
     
     res.render("products", ({
+      user: req.session.user,
       category,
       limit,
       stock,
