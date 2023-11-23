@@ -1,10 +1,12 @@
 import express from 'express';
+import passport from 'passport';
 import expressSession from 'express-session';
 import {__dirname} from './utils.js';
 import expressHandlebars from 'express-handlebars';
 import path from 'path';
 import MongoStore from 'connect-mongo';
 import { URI } from './db/mongodb.js';
+import { init as initPassportConfig } from './config/passport.config.js'
 import productsRouter from './routers/products.router.js';
 import cartRouter from './routers/carts.router.js';
 import indexRouter from './routers/index.router.js';
@@ -32,6 +34,11 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, '../public')));
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'handlebars');
+
+initPassportConfig();
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 const hbs = expressHandlebars.create();
 hbs.handlebars.registerHelper('isEqualThan', function(valueA, valueB, options) {

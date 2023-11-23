@@ -1,9 +1,10 @@
 import { Router } from "express";
-
+import { createHash, isValidPassword } from '../utils.js';
 import UserModel from "../dao/models/user.model.js";
+import passport from 'passport';
 
 const router = Router();
-
+/*
 router.post("/sessions/register", async (req, res) => {
   try {
     const { body } = req;
@@ -49,6 +50,23 @@ router.post("/sessions/login", async (req, res) => {
     res.status(500).send("Error interno del servidor al iniciar sesión");
   }
 });
+*/
+router.post('/sessions/register', passport.authenticate('register', { failureRedirect: '/register' }), (req, res) => {
+  res.redirect('/login');
+})
+
+router.post('/sessions/login', passport.authenticate('login', { failureRedirect: '/login' }), (req, res) => {
+  console.log('req.user', req.user);
+  req.session.user = req.user;
+  res.redirect('/api/products');
+});
+
+router.get('/sessions/github', passport.authenticate('github', { scope: ['user:email'] }));
+
+router.get('/sessions/github/callback', passport.authenticate('github', { failureRedirect: '/login' }), (req, res) => {
+  req.session.user = req.user;
+  res.redirect('/api/products');
+})
 
 router.get("/sessions/logout", (req, res) => {
   req.session.destroy((error) => {
