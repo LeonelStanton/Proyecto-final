@@ -51,6 +51,7 @@ router.post("/sessions/login", async (req, res) => {
   }
 });
 */
+/*
 router.post('/sessions/register', passport.authenticate('register', { failureRedirect: '/register' }), (req, res) => {
   res.redirect('/login');
 })
@@ -78,5 +79,5 @@ router.get("/sessions/logout", (req, res) => {
     }
   });
 });
-
+*/
 export default router;

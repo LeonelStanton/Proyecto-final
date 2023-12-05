@@ -5,14 +5,9 @@ import {getProducts, saveProducts} from '../utils.js'
 import ProductModel from "../dao/models/product.model.js";
 
 const router = Router();
-const privateRouter = (req, res, next) =>{
-  if (!req.session.user) {
-    return res.redirect('/login');
-  }
-  next();
-};
 
-router.get("/products", privateRouter, async (req, res) => {
+
+router.get("/products", async (req, res) => {
 
   try {
     

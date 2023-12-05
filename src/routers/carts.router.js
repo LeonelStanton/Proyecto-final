@@ -1,11 +1,21 @@
 import { Router } from "express";
+import passport from 'passport';
 import { v4 as uuidv4 } from "uuid";
 import * as fs from "fs";
 import CartManager from "../dao/CartManager.js";
+import CartModel from '../dao/models/cart.model.js';
 
 
 
 const router = Router();
+
+
+router.get('/carts',
+  passport.authenticate('jwt', { session: false }),
+  async (req, res) => {
+    res.status(200).json(req.user);
+    
+  });
 
 router.get("/carts/:cid", async (req, res) => {
   try {
@@ -43,13 +53,14 @@ router.get("/carts/:cid", async (req, res) => {
   */
 });
 
+
 router.post("/carts", async (req, res) => {
   try {
     const cart = await CartManager.create();
     res.status(201).json(cart);
   } catch (error) {
     res.status(error.statusCode || 500).json({ message: error.message });
-  }
+  } 
   /*
   try {
     const carts = getCarts();

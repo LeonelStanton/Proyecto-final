@@ -1,20 +1,26 @@
 import passport from 'passport';
-import { Strategy as LocalStrategy } from 'passport-local';
-import { Strategy as GithubStrategy } from 'passport-github2';
-import { createHash, isValidPassword } from '../utils.js';
-import UserModel from '../dao/models/user.model.js';
 
-const opts = {
-  usernameField: 'email',
-  passReqToCallback: true,
+import { JWT_SECRET } from '../utils.js';
+
+import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
+
+function cookieExtractor(req) {
+  let token = null;
+  if (req && req.cookies) {
+    token = req.signedCookies['access_token'];;
+  }
+  return token;
+}
+
+export const init = () => {
+  passport.use('jwt', new JWTStrategy({
+    jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
+    secretOrKey: JWT_SECRET,
+  }, (payload, done) => {
+    return done(null, payload);
+  }));
 };
-
-const githubOpts = {
-    clientID: 'Iv1.33c49b6ce0978a4d', // Este dato debe ser pasado por parametro
-    clientSecret: '5d36f85337f209be560ac487b82731988e7510a1', // Este dato debe ser pasado por parametro
-    callbackURL: "http://localhost:8080/api/sessions/github/callback", // Este dato debe ser pasado por parametro
-  };
-
+/*
 export const init = () => {
   passport.use('register', new LocalStrategy(opts, async (req, email, password, done) => {
     try {
@@ -77,4 +83,5 @@ export const init = () => {
     const user = await UserModel.findById(uid);
     done(null, user);
   });
-}
+}^
+*/
