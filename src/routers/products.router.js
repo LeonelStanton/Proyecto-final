@@ -1,15 +1,16 @@
 import { Router } from "express";
-import { v4 as uuidv4 } from "uuid";
-import ProductManager from '../dao/ProductManager.js';
-import {getProducts, saveProducts} from '../utils.js'
-import ProductModel from "../dao/models/product.model.js";
+import ProductManager from '../controllers/product.controller.js';
+import ProductModel from "../models/product.model.js";
+import { authMiddleware } from '../utils/auth.utils.js';
+import UserController from '../controllers/user.controller.js';
 
 const router = Router();
 
 
-router.get("/products", async (req, res) => {
+router.get("/products",authMiddleware('jwt'), async (req, res) => {
 
   try {
+    let user=await UserController.getCurrentUser(req,res);
     
     const { page = 1, limit = 10, category, stock, sort} = req.query;
     const opts = { page, limit}
@@ -27,7 +28,7 @@ router.get("/products", async (req, res) => {
     const result = await ProductModel.paginate(criteria, opts);
     
     res.render("products", ({
-      user: req.session.user,
+      
       category,
       limit,
       stock,

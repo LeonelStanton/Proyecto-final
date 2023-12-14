@@ -1,25 +1,23 @@
 import express from 'express';
 import passport from 'passport';
 import cookieParser from 'cookie-parser';
-import expressSession from 'express-session';
-import {__dirname} from './utils.js';
 import expressHandlebars from 'express-handlebars';
 import path from 'path';
-import MongoStore from 'connect-mongo';
-import { URI } from './db/mongodb.js';
 import { init as initPassport } from './config/passport.config.js';
 import productsRouter from './routers/products.router.js';
 import cartRouter from './routers/carts.router.js';
 import indexRouter from './routers/index.router.js';
-import chatRouter from './routers/chat.router.js';
-import sessionsRouter from './routers/sessions.router.js';
-import jwtRouter from './routers/jwt.router.js';
+import authRouter from './routers/auth.router.js';
+import config from './config.js';
+import { getDirname } from './utils/utils.js';
+
+const __dirname = getDirname(import.meta.url);
 
 
 
 const app = express();
 
-const COOKIE_SECRET = 'qBvPkU2X;J1,51Z!~2p[JW.DT|g:4l@';
+const COOKIE_SECRET = config.cookieSecret;
 app.use(cookieParser(COOKIE_SECRET));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
@@ -47,7 +45,7 @@ hbs.handlebars.registerHelper('json', function (context) {
 app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
-app.use('/', indexRouter, chatRouter);
-app.use('/api', productsRouter, cartRouter,jwtRouter);
+app.use('/', indexRouter);
+app.use('/api', productsRouter, cartRouter,authRouter);
 
 export default app;

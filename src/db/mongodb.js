@@ -1,10 +1,9 @@
 import mongoose from 'mongoose';
-
-export const URI = 'mongodb+srv://leonel:UtN834vlGJ7ouTik@cluster0.k3edcne.mongodb.net/ecommerce';
+import config from '../config.js';
 
 export const initDB = async () => {
   try {
-  
+    const URI = config.db.mongodbUri;
     await mongoose.connect(URI);
     console.log('Database conected 🚀');
   } catch (error) {

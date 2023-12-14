@@ -2,8 +2,8 @@ import { Router } from "express";
 import passport from 'passport';
 import { v4 as uuidv4 } from "uuid";
 import * as fs from "fs";
-import CartManager from "../dao/CartManager.js";
-import CartModel from '../dao/models/cart.model.js';
+import CartManager from "../controllers/cart.controller.js";
+
 
 
 

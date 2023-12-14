@@ -1,6 +1,6 @@
 import passport from 'passport';
+import config from '../config.js';
 
-import { JWT_SECRET } from '../utils.js';
 
 import { Strategy as JWTStrategy, ExtractJwt } from 'passport-jwt';
 
@@ -15,7 +15,7 @@ function cookieExtractor(req) {
 export const init = () => {
   passport.use('jwt', new JWTStrategy({
     jwtFromRequest: ExtractJwt.fromExtractors([cookieExtractor]),
-    secretOrKey: JWT_SECRET,
+    secretOrKey: config.jwtSecret,
   }, (payload, done) => {
     return done(null, payload);
   }));
