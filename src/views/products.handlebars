@@ -21,13 +21,13 @@
     <div>
     {{#if sort}}
   {{#isEqualThan sort 'asc'}}
-    <a href="http://localhost:8080/api/products?limit={{limit}}&page={{page}}{{#if category}}&category={{category}}{{/if}}{{#if stock}}&stock={{stock}}{{/if}}&sort=desc" role="button">Cambiar a orden descendente</a>
+    <a href="http://localhost:8080/products?limit={{limit}}&page={{page}}{{#if category}}&category={{category}}{{/if}}{{#if stock}}&stock={{stock}}{{/if}}&sort=desc" role="button">Cambiar a orden descendente</a>
   {{else}}
-    <a href="http://localhost:8080/api/products?limit={{limit}}&page={{page}}{{#if category}}&category={{category}}{{/if}}{{#if stock}}&stock={{stock}}{{/if}}&sort=asc" role="button">Cambiar a orden ascendente</a>
+    <a href="http://localhost:8080/products?limit={{limit}}&page={{page}}{{#if category}}&category={{category}}{{/if}}{{#if stock}}&stock={{stock}}{{/if}}&sort=asc" role="button">Cambiar a orden ascendente</a>
   {{/isEqualThan}}
 {{else}}
   
-  <a href="http://localhost:8080/api/products?limit={{limit}}&page={{page}}{{#if category}}&category={{category}}{{/if}}{{#if stock}}&stock={{stock}}{{/if}}&sort=asc" role="button">Agregar ordenamiento</a>
+  <a href="http://localhost:8080/products?limit={{limit}}&page={{page}}{{#if category}}&category={{category}}{{/if}}{{#if stock}}&stock={{stock}}{{/if}}&sort=asc" role="button">Agregar ordenamiento</a>
 {{/if}}
 </div>
 <button id="createCartBtn" class="outline">Crear Carrito</button>

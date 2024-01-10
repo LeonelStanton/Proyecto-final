@@ -1,44 +1,44 @@
-import ProductDAO from '../dao/product.dao.js'; // Import your CartDAO class
-import { Exception } from '../utils/utils.js'; // Import your Exception class
+import ProductRepository from "../repositories/product.repository.js";
+import { ServerException } from "../utils/utils.js"; // Import your Exception class
 
 export default class ProductController {
   static async get(query = {}) {
     try {
-      return await ProductDAO.get(query);
+      return await ProductRepository.get(query);
     } catch (error) {
-      throw new Exception('Error al obtener productos', 500);
+      throw new ServerException("Error al obtener productos");
     }
   }
 
   static async getById(productId) {
     try {
-      return await ProductDAO.getById(productId);
+      return await ProductRepository.getById(productId);
     } catch (error) {
-      throw new Exception('Error al obtener el producto', 500);
+      throw new ServerException("Error al obtener el producto");
     }
   }
 
   static async create(data) {
     try {
-      return await ProductDAO.create(data);
+      return await ProductRepository.create(data);
     } catch (error) {
-      throw new Exception('Error al crear el producto', 500);
+      throw new ServerException("Error al crear el producto");
     }
   }
 
   static async updateById(productId, data) {
     try {
-      return await ProductDAO.updateById(productId, data);
+      return await ProductRepository.updateById(productId, data);
     } catch (error) {
-      throw new Exception('Error al actualizar el producto', 500);
+      throw new ServerException("Error al actualizar el producto");
     }
   }
 
   static async deleteById(productId) {
     try {
-      return await ProductDAO.deleteById(productId);
+      return await ProductRepository.deleteById(productId);
     } catch (error) {
-      throw new Exception('Error al eliminar el producto', 500);
+      throw new ServerException("Error al eliminar el producto");
     }
   }
 }

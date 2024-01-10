@@ -1,13 +1,17 @@
-import CartModel from '../models/cart.model.js'; // Import your CartModel
-import { Exception } from '../utils/utils.js';
- // Import your Exception class
+// cart.repository.js
+import CartModel from '../models/cart.model.js';
+import {
+  
+  NotFoundException,
+  ServerException,
+} from '../utils/utils.js';
 
 export default class CartDAO {
   static async get(query = {}) {
     try {
       return await CartModel.find(query);
     } catch (error) {
-      throw new Exception('Error al obtener carritos de compras', 500);
+      throw new ServerException('Error al obtener carritos de compras');
     }
   }
 
@@ -15,11 +19,11 @@ export default class CartDAO {
     try {
       const cart = await CartModel.findById(cid).populate('products.product');
       if (!cart) {
-        throw new Exception('No existe el carrito ', 404);
+        throw new NotFoundException('No existe el carrito');
       }
       return cart;
     } catch (error) {
-      throw new Exception('Error al obtener el carrito', 500);
+      throw new ServerException('Error al obtener el carrito');
     }
   }
 
@@ -29,7 +33,7 @@ export default class CartDAO {
       console.log('Carrito creado correctamente ');
       return cart;
     } catch (error) {
-      throw new Exception('Error al crear un carrito', 500);
+      throw new ServerException('Error al crear un carrito');
     }
   }
 
@@ -37,7 +41,7 @@ export default class CartDAO {
     try {
       const cart = await CartModel.findById(cid);
       if (!cart) {
-        throw new Exception('No existe el carrito ', 404);
+        throw new NotFoundException('No existe el carrito');
       }
 
       const productIndex = cart.products.findIndex((p) => p.product.equals(pid));
@@ -54,7 +58,7 @@ export default class CartDAO {
       await cart.save();
       return cart;
     } catch (error) {
-      throw new Exception('Error al actualizar el carrito', 500);
+      throw new ServerException('Error al actualizar el carrito');
     }
   }
 
@@ -67,11 +71,11 @@ export default class CartDAO {
       );
 
       if (!updatedCart) {
-        throw new Exception('No existe el carrito', 404);
+        throw new NotFoundException('No existe el carrito');
       }
       return updatedCart;
     } catch (error) {
-      throw new Exception('Error al actualizar el carrito', 500);
+      throw new ServerException('Error al actualizar el carrito');
     }
   }
 
@@ -79,13 +83,13 @@ export default class CartDAO {
     try {
       const cart = await CartModel.findById(cid);
       if (!cart) {
-        throw new Exception('No existe el carrito ', 404);
+        throw new NotFoundException('No existe el carrito');
       }
 
       const productIndex = cart.products.findIndex((p) => p.product.equals(pid));
 
       if (productIndex === -1) {
-        throw new Exception('No existe el producto ', 404);
+        throw new NotFoundException('No existe el producto');
       } else {
         cart.products[productIndex].quantity = quant.quantity;
       }
@@ -93,7 +97,7 @@ export default class CartDAO {
       await cart.save();
       return cart;
     } catch (error) {
-      throw new Exception('Error al actualizar el carrito', 500);
+      throw new ServerException('Error al actualizar el carrito');
     }
   }
 
@@ -101,7 +105,7 @@ export default class CartDAO {
     try {
       const cart = await CartModel.findById(cid);
       if (!cart) {
-        throw new Exception('No existe el carrito ', 404);
+        throw new NotFoundException('No existe el carrito');
       }
 
       cart.products.pull({ product: pid });
@@ -109,7 +113,7 @@ export default class CartDAO {
       await cart.save();
       return cart;
     } catch (error) {
-      throw new Exception('Error al eliminar producto del carrito', 500);
+      throw new ServerException('Error al eliminar producto del carrito');
     }
   }
 
@@ -124,12 +128,12 @@ export default class CartDAO {
       );
 
       if (!updatedCart) {
-        throw new Exception('No existe el carrito', 404);
+        throw new NotFoundException('No existe el carrito');
       }
 
       return updatedCart;
     } catch (error) {
-      throw new Exception('Error al eliminar productos del carrito', 500);
+      throw new ServerException('Error al eliminar productos del carrito');
     }
   }
 }

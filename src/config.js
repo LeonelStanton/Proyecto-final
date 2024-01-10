@@ -24,6 +24,8 @@ export default {
   db: {
     mongodbUri: process.env.MONGO_URL,
   },
+  jwtLifeTime: process.env.JWT_LIFETIME,
   jwtSecret: process.env.JWT_SECRET,
+  cookieLifeTime: process.env.COOKIE_LIFETIME,
   cookieSecret: process.env.COOKIE_SECRET,
 }

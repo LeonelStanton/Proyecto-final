@@ -1,68 +1,77 @@
-import CartDAO from '../dao/cart.dao.js'; 
-import { Exception } from '../utils/utils.js'; 
+import CartRepository from "../repositories/cart.repository.js";
+
+import { ServerException } from "../utils/utils.js";
 
 export default class CartController {
   static async get(query = {}) {
     try {
-      return await CartDAO.get(query);
+      return await CartRepository.get(query);
     } catch (error) {
-      throw new Exception('Error al obtener carritos de compras', 500);
+      throw new ServerException("Error al obtener carritos de compras");
     }
   }
 
   static async getCartById(cid) {
     try {
-      return await CartDAO.getCartById(cid);
+      return await CartRepository.getCartById(cid);
     } catch (error) {
-      throw new Exception('Error al obtener el carrito', 500);
+      throw new ServerException("Error al obtener el carrito");
     }
   }
 
   static async create() {
     try {
-      return await CartDAO.create();
+      return await CartRepository.create();
     } catch (error) {
-      throw new Exception('Error al crear un carrito', 500);
+      throw new ServerException("Error al crear un carrito");
     }
   }
 
   static async updateProductByCart(cid, pid) {
     try {
-      return await CartDAO.updateProductByCart(cid, pid);
+      return await CartRepository.updateProductByCart(cid, pid);
     } catch (error) {
-      throw new Exception('Error al actualizar el carrito', 500);
+      throw new ServerException("Error al actualizar el carrito");
     }
   }
 
   static async updateAll(cid, data) {
     try {
-      return await CartDAO.updateAll(cid, data);
+      return await CartRepository.updateAll(cid, data);
     } catch (error) {
-      throw new Exception('Error al actualizar el carrito', 500);
+      throw new ServerException("Error al actualizar el carrito");
     }
   }
 
   static async updateOne(cid, pid, quant) {
     try {
-      return await CartDAO.updateOne(cid, pid, quant);
+      return await CartRepository.updateOne(cid, pid, quant);
     } catch (error) {
-      throw new Exception('Error al actualizar el carrito', 500);
+      throw new ServerException("Error al actualizar el carrito");
     }
   }
 
   static async deleteProductByCart(cid, pid) {
     try {
-      return await CartDAO.deleteProductByCart(cid, pid);
+      return await CartRepository.deleteProductByCart(cid, pid);
     } catch (error) {
-      throw new Exception('Error al eliminar producto del carrito', 500);
+      throw new ServerException("Error al eliminar producto del carrito");
     }
   }
 
   static async deleteAll(cid) {
     try {
-      return await CartDAO.deleteAll(cid);
+      return await CartRepository.deleteAll(cid);
     } catch (error) {
-      throw new Exception('Error al eliminar productos del carrito', 500);
+      throw new ServerException("Error al eliminar productos del carrito");
+    }
+  }
+
+  static async purchase(cid) {
+    try {
+      return await CartRepository.purchase(cid);
+    } catch (error) {
+      throw new ServerException("Error al procesar la compra");
     }
   }
 }

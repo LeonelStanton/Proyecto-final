@@ -8,6 +8,7 @@ import productsRouter from './routers/products.router.js';
 import cartRouter from './routers/carts.router.js';
 import indexRouter from './routers/index.router.js';
 import authRouter from './routers/auth.router.js';
+
 import config from './config.js';
 import { getDirname } from './utils/utils.js';
 

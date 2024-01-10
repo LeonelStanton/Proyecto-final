@@ -1,5 +1,4 @@
 import { Router } from 'express';
-import passport from 'passport';
 import UserController from '../controllers/user.controller.js';
 import { authMiddleware } from '../utils/auth.utils.js';
 
@@ -9,6 +8,8 @@ router.post('/auth/register', UserController.register);
 
 router.post('/auth/login', UserController.login);
 
-router.get('/current', authMiddleware('jwt'), UserController.getCurrentUser);
+router.put("/user/:uid/cart/:cid",authMiddleware('jwt',["admin"]), UserController.updateUser);
+
+router.get('/current', authMiddleware('jwt',["user"]), UserController.getCurrentUser);
 
 export default router;
