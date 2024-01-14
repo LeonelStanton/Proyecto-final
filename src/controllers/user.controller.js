@@ -63,6 +63,7 @@ export default class UserController {
     try {
       const { uid, cid } = req.params;
       await UserRepository.updateUserCart(uid, cid);
+      res.status(200).json({ status: "success", message: "Usuario actualizado" });
     } catch (error) {
       console.error(error);
       res.status(500).json({ message: "Error interno del servidor" });
