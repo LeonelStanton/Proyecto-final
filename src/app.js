@@ -8,7 +8,7 @@ import productsRouter from './routers/products.router.js';
 import cartRouter from './routers/carts.router.js';
 import indexRouter from './routers/index.router.js';
 import authRouter from './routers/auth.router.js';
-
+import errorMiddleware from './middlewares/error.middleware.js';
 import config from './config.js';
 import { getDirname } from './utils/utils.js';
 
@@ -48,5 +48,5 @@ app.set('view engine', 'handlebars');
 
 app.use('/', indexRouter);
 app.use('/api', productsRouter, cartRouter,authRouter);
-
+app.use(errorMiddleware)
 export default app;

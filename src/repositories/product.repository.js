@@ -14,9 +14,9 @@ export default class ProductRepository {
   static async getById(productId) {
     try {
       const product = await ProductDAO.getById(productId);
-      if (!product) {
+      /*if (!product) {
         throw new NotFoundException("No existe el producto");
-      }
+      } */
       return product;
     } catch (error) {
       throw new ServerException("Error al obtener el producto");

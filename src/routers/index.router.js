@@ -1,7 +1,7 @@
 import { Router } from "express";
 import ProductManager from "../controllers/product.controller.js";
 import ProductModel from "../models/product.model.js";
-import { authMiddleware } from "../utils/auth.utils.js";
+import { authMiddleware } from '../middlewares/auth.middleware.js';
 
 const router = Router();
 

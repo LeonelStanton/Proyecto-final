@@ -1,5 +1,8 @@
 // cart.repository.js
 import CartModel from '../models/cart.model.js';
+import { CustomError } from '../errors/custom.error.js'; 
+import { generatorProductinCartError} from '../errors/cause.error.message.js';
+import EnumsError from '../errors/enums.error.js';
 import {
   
   NotFoundException,
@@ -18,9 +21,9 @@ export default class CartDAO {
   static async getCartById(cid) {
     try {
       const cart = await CartModel.findById(cid).populate('products.product');
-      if (!cart) {
+    /*  if (!cart) {
         throw new NotFoundException('No existe el carrito');
-      }
+      } */
       return cart;
     } catch (error) {
       throw new ServerException('Error al obtener el carrito');
@@ -40,9 +43,9 @@ export default class CartDAO {
   static async updateProductByCart(cid, pid) {
     try {
       const cart = await CartModel.findById(cid);
-      if (!cart) {
+    /*  if (!cart) {
         throw new NotFoundException('No existe el carrito');
-      }
+      } */
 
       const productIndex = cart.products.findIndex((p) => p.product.equals(pid));
 
@@ -70,9 +73,9 @@ export default class CartDAO {
         { new: true }
       );
 
-      if (!updatedCart) {
+     /* if (!updatedCart) {
         throw new NotFoundException('No existe el carrito');
-      }
+      } */
       return updatedCart;
     } catch (error) {
       throw new ServerException('Error al actualizar el carrito');
@@ -82,14 +85,19 @@ export default class CartDAO {
   static async updateOne(cid, pid, quant) {
     try {
       const cart = await CartModel.findById(cid);
-      if (!cart) {
+     /* if (!cart) {
         throw new NotFoundException('No existe el carrito');
-      }
+      } */
 
       const productIndex = cart.products.findIndex((p) => p.product.equals(pid));
 
       if (productIndex === -1) {
-        throw new NotFoundException('No existe el producto');
+        CustomError.createError({
+          name: 'Error buscando al producto en el carrito',
+          cause: generatorProductinCartError(),
+          message: "El producto no esta en el carrito" ,
+          code: EnumsError.PRODUCT_INCART_NF,
+        });
       } else {
         cart.products[productIndex].quantity = quant.quantity;
       }
@@ -104,10 +112,19 @@ export default class CartDAO {
   static async deleteProductByCart(cid, pid) {
     try {
       const cart = await CartModel.findById(cid);
-      if (!cart) {
+     /* if (!cart) {
         throw new NotFoundException('No existe el carrito');
-      }
+      } */
+      const productIndex = cart.products.findIndex((p) => p.product.equals(pid));
 
+      if (productIndex === -1) {
+        CustomError.createError({
+          name: 'Error buscando al producto en el carrito',
+          cause: generatorProductinCartError(),
+          message: "El producto no esta en el carrito" ,
+          code: EnumsError.PRODUCT_INCART_NF,
+        });
+      }
       cart.products.pull({ product: pid });
 
       await cart.save();
@@ -126,10 +143,9 @@ export default class CartDAO {
         },
         { new: true }
       );
-
-      if (!updatedCart) {
+/*  if (!updatedCart) {
         throw new NotFoundException('No existe el carrito');
-      }
+      } */
 
       return updatedCart;
     } catch (error) {

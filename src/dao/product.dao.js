@@ -14,9 +14,9 @@ export default class ProductDAO {
   static async getById(productId) {
     try {
       const product = await ProductModel.findById(productId);
-      if (!product) {
+     /* if (!product) {
         throw new NotFoundException('No existe el producto');
-      }
+      } */
       return product;
     } catch (error) {
       throw new ServerException('Error al obtener el producto');
@@ -36,9 +36,9 @@ export default class ProductDAO {
   static async updateById(productId, data) {
     try {
       const product = await ProductModel.findById(productId);
-      if (!product) {
+    /*  if (!product) {
         throw new NotFoundException('No existe el producto');
-      }
+      } */
       const criteria = { _id: productId };
       const operation = { $set: data };
       await ProductModel.updateOne(criteria, operation);
@@ -51,9 +51,9 @@ export default class ProductDAO {
   static async deleteById(productId) {
     try {
       const product = await ProductModel.findById(productId);
-      if (!product) {
+     /* if (!product) {
         throw new NotFoundException('No existe el producto');
-      }
+      } */
       const criteria = { _id: productId };
       await ProductModel.deleteOne(criteria);
       console.log('Producto eliminado correctamente ');

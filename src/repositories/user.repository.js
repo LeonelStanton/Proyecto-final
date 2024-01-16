@@ -14,6 +14,16 @@ export default class UserRepository {
     return user;
   }
 
+  static async findById(uid) {
+    const user = await UserDAO.findById(uid);
+
+    /*    if (!user) {
+      throw new NotFoundException('Usuario no encontrado');
+    } */
+
+    return user;
+  }
+
   static async createUser(userDetails) {
     try {
       return await UserDAO.createUser(userDetails);

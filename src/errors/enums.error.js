@@ -1,0 +1,39 @@
+export default {
+    ROUTING_ERROR: 1,
+    INVALID_TYPE_ERROR: 2,
+    DATA_BASE_ERROR: 3,
+    INVALID_PARAMS_ERROR: 4,
+    BAD_REQUEST_ERROR: 5,
+    USER_ALREADY_EXISTS: 6,
+    INVALID_CREDENTIALS: 7,
+    PRODUCT_NOT_FOUND:8,
+    CART_NOT_FOUND:9,
+    USER_NOT_FOUND:10,
+    PRODUCT_INCART_NF:11,
+  };
+
+ /* export const ErrorMessages = {
+    PRODUCT_NOT_FOUND: "Product not found by Id",
+    MISSING_DATA: "Some data is missing",
+    OID_INVALID_FORMAT:"Object id invalid format",
+    CART_NOT_FOUND: "Cart not found",
+    CART_OR_PRODUCT_NOT_FOUND: "Cart or Product not found by Id",
+    CART_ALREADY_EXISTS: "Cart already exists", 
+    PRODUCT_ALREADY_EXISTS: "Product already exists",
+    INVALID_CREDENTIALS: "Invalid credentials",
+    USER_NOT_FOUND: "User not found",
+    USER_ALREADY_EXISTS: "User already exists",
+}
+
+export const ErrorName = {
+    PRODUCT_NOT_FOUND: "PRODUCT_NOT_FOUND",
+    MISSING_DATA: "MISSING_DATA",
+    OID_INVALID_FORMAT:"OID_INVALID_FORMAT",
+    CART_NOT_FOUND: "CART_NOT_FOUND",
+    CART_OR_PRODUCT_NOT_FOUND: "CART_OR_PRODUCT_NOT_FOUND",
+    CART_ALREADY_EXISTS: "CART_ALREADY_EXISTS",
+    PRODUCT_ALREADY_EXISTS: "PRODUCT_ALREADY_EXISTS",
+    INVALID_CREDENTIALS: "INVALID_CREDENTIALS", 
+    USER_NOT_FOUND: "USER_NOT_FOUND",
+    USER_ALREADY_EXISTS: "USER_ALREADY_EXISTS",
+} */

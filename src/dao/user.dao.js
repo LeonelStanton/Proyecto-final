@@ -17,6 +17,21 @@ export default class UserDAO {
       throw new ServerException('Error al buscar usuario por correo');
     }
   }
+  static async findById(id) {
+    try {
+      return await UserModel.findById(id).populate({
+        path: 'cart',
+        populate: {
+          path: 'products.product',
+          model: 'Products',
+        },
+      });
+    } catch (error) {
+      throw new ServerException('Error al buscar usuario por correo');
+    }
+  }
+
+
 
   static async findByCart(cart) {
     try {
@@ -25,6 +40,8 @@ export default class UserDAO {
       throw new ServerException('Error al buscar usuario por carrito');
     }
   }
+
+  
 
   static async createUser({ first_name, last_name, age, email, password,cart }) {
     try {
