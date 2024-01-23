@@ -85,4 +85,14 @@ router.get("/chat", authMiddleware("jwt", ["user"]), (req, res) => {
   res.render("chat");
 });
 
+router.get('/loggerTest', (req, res) => {
+  req.logger.fatal('Esta es una prueba de log fatal');
+  req.logger.error('Esta es una prueba de log error');
+  req.logger.warning('Esta es una prueba de log warning');
+  req.logger.info('Esta es una prueba de log info');
+  req.logger.http('Esta es una prueba de log http');
+  req.logger.debug('Esta es una prueba de log debug');
+  res.status(200).send('Prueba de loggers exitosa');
+});
+
 export default router;

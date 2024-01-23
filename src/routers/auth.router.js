@@ -5,35 +5,55 @@ import { authMiddleware } from '../middlewares/auth.middleware.js';
 const router = Router();
 
 router.post('/auth/register', async (req, res, next) => {
-    try {
+  try {
+      
       await UserController.register(req, res);
-    } catch (error) {
+      // Log de nivel info para registro de usuario exitoso
+      req.logger.info('Registro de usuario exitoso');
+  } catch (error) {
+      // Log de nivel error en caso de fallo en el registro
+      req.logger.error(`Error durante el registro: ${error.message}`);
       next(error); // Pasar el error al middleware de manejo de errores
-    }
-  });
+  }
+});
 
 router.post('/auth/login', async (req, res, next) => {
-    try {
+  try {
+      
       await UserController.login(req, res);
-    } catch (error) {
+      // Log de nivel info para inicio de sesión exitoso
+      req.logger.info('Inicio de sesión exitoso');
+  } catch (error) {
+      // Log de nivel error en caso de fallo en el inicio de sesión
+      req.logger.error(`Error durante el inicio de sesión: ${error.message}`);
       next(error); // Pasar el error al middleware de manejo de errores
-    }
-  });
+  }
+});
 
-  router.put('/user/:uid/cart/:cid', authMiddleware('jwt', ['admin']), async (req, res, next) => {
-    try {
+router.put('/user/:uid/cart/:cid', authMiddleware('jwt', ['admin']), async (req, res, next) => {
+  try {
+      
       await UserController.updateUser(req, res);
-    } catch (error) {
+      // Log de nivel info para actualización exitosa del usuario
+      req.logger.info('Actualización exitosa del usuario');
+  } catch (error) {
+      // Log de nivel error en caso de fallo en la actualización del usuario
+      req.logger.error(`Error durante la actualización del usuario: ${error.message}`);
       next(error); // Pasar el error al middleware de manejo de errores
-    }
-  });
+  }
+});
 
-  router.get('/current', authMiddleware('jwt', ['user']), async (req, res, next) => {
-    try {
+router.get('/current', authMiddleware('jwt', ['user']), async (req, res, next) => {
+  try {
+      
       await UserController.getCurrentUser(req, res);
-    } catch (error) {
+      // Log de nivel info para obtener el usuario actual
+      req.logger.info('Obtención exitosa del usuario actual');
+  } catch (error) {
+      // Log de nivel error en caso de fallo al obtener el usuario actual
+      req.logger.error(`Error al obtener el usuario actual: ${error.message}`);
       next(error); // Pasar el error al middleware de manejo de errores
-    }
-  });
+  }
+});
 
 export default router;

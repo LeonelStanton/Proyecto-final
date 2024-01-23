@@ -50,7 +50,6 @@ export default class UserController {
         cart,
       });
   
-      console.log("Usuario creado correctamente");
       res.redirect("/login");
     } catch (error) {
       throw error; // Asegurarse de lanzar el error para que pueda ser manejado por el middleware de manejo de errores

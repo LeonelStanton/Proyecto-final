@@ -44,7 +44,7 @@ export default class CartController {
       const cart = await CartRepository.getCartById(cid)
       
       if (!cart){
-     throwCustomError.createError({
+     throw CustomError.createError({
           name: 'Error buscando al carrito',
           cause: generatorCartError(),
           message: "El carrito no existe" ,

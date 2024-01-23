@@ -1,14 +1,16 @@
 import { Server } from "socket.io";
 import MessageManager from "./dao/message.dao.js";
 import ProductManager from "./controllers/product.controller.js";
-
+import { loggerDev, loggerProd } from './config/logger.config.js';
+import config from './config.js';
 let io;
-
+const logger = getLogger();
 export const init = (httpServer) => {
   io = new Server(httpServer);
-
+ 
+ 
   io.on("connection", async (socketClient) => {
-    console.log(`Se ha conectado un nuevo cliente (${socketClient.id})`);
+    logger.info(`Se ha conectado un nuevo cliente (${socketClient.id})`);
 
     try {
       const messages = await MessageManager.get();
@@ -40,5 +42,10 @@ export const init = (httpServer) => {
       io.emit("actual-products", { products });
     });
   });
-  console.log("Server socket running 🚀");
+  logger.info("Server socket running 🚀");
 };
+
+
+function getLogger() {
+  return config.env === 'dev' ? loggerDev : loggerProd;
+}
