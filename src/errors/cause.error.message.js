@@ -61,3 +61,7 @@ export const generatorUserError = (user) => {
     return `Se debe enviar un producto valido 😱.
      `;
    } 
+   export const generatorFormatError = () => {
+    return `Se debe enviar una id en un formato válido de Mongoose  😱.
+     `;
+   } 

@@ -1,6 +1,12 @@
 // product.repository.js
 import ProductModel from '../models/product.model.js';
 import { Exception, NotFoundException, ServerException } from '../utils/utils.js';
+import { CustomError } from "../errors/custom.error.js";
+import {
+  generatorProductIdError,
+  generatorProductError,
+} from "../errors/cause.error.message.js";
+import EnumsError from "../errors/enums.error.js";
 
 export default class ProductDAO {
   static async get(query = {}) {
@@ -14,14 +20,15 @@ export default class ProductDAO {
   static async getById(productId) {
     try {
       const product = await ProductModel.findById(productId);
-     /* if (!product) {
-        throw new NotFoundException('No existe el producto');
-      } */
+  
+      
+
       return product;
     } catch (error) {
-      throw new ServerException('Error al obtener el producto');
+      throw new ServerException('Error al buscar el producto');
     }
   }
+
 
   static async create(data) {
     try {

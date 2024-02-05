@@ -1,8 +1,13 @@
 import CartRepository from "../repositories/cart.repository.js";
 import ProductRepository from "../repositories/product.repository.js";
-import { CustomError } from '../errors/custom.error.js'; 
-import { generatorCartError, generatorProductError } from '../errors/cause.error.message.js';
-import EnumsError from '../errors/enums.error.js';
+import { CustomError } from "../errors/custom.error.js";
+import mongoose from "mongoose";
+import {
+  generatorCartError,
+  generatorProductError,
+  generatorFormatError,
+} from "../errors/cause.error.message.js";
+import EnumsError from "../errors/enums.error.js";
 import { ServerException } from "../utils/utils.js";
 
 export default class CartController {
@@ -16,12 +21,20 @@ export default class CartController {
 
   static async getCartById(cid) {
     try {
-      const cart = await CartRepository.getCartById(cid)
-      if (!cart){
-       throw CustomError.createError({
-          name: 'Error buscando al carrito',
+      if (!mongoose.Types.ObjectId.isValid(cid)) {
+        throw CustomError.createError({
+          name: "Error de id del carrito",
+          cause: generatorFormatError(),
+          message: "La id no es valida",
+          code: EnumsError.INVALID_PARAMS_ERROR,
+        });
+      }
+      const cart = await CartRepository.getCartById(cid);
+      if (!cart) {
+        throw CustomError.createError({
+          name: "Error buscando al carrito",
           cause: generatorCartError(),
-          message: "El carrito no existe" ,
+          message: "El carrito no existe",
           code: EnumsError.CART_NOT_FOUND,
         });
       }
@@ -41,24 +54,40 @@ export default class CartController {
 
   static async updateProductByCart(cid, pid) {
     try {
-      const cart = await CartRepository.getCartById(cid)
-      
-      if (!cart){
-     throw CustomError.createError({
-          name: 'Error buscando al carrito',
+      if (!mongoose.Types.ObjectId.isValid(cid)) {
+        throw CustomError.createError({
+          name: "Error de id del carrito",
+          cause: generatorFormatError(),
+          message: "La id no es valida",
+          code: EnumsError.INVALID_PARAMS_ERROR,
+        });
+      }
+      if (!mongoose.Types.ObjectId.isValid(pid)) {
+        throw CustomError.createError({
+          name: "Error de id del producto",
+          cause: generatorFormatError(),
+          message: "La id no es valida",
+          code: EnumsError.INVALID_PARAMS_ERROR,
+        });
+      }
+      const cart = await CartRepository.getCartById(cid);
+
+      if (!cart) {
+        throw CustomError.createError({
+          name: "Error buscando al carrito",
           cause: generatorCartError(),
-          message: "El carrito no existe" ,
+          message: "El carrito no existe",
           code: EnumsError.CART_NOT_FOUND,
         });
       }
       const prod = await ProductRepository.getById(pid);
-      if(!prod){
-     throw CustomError.createError({
-         name: 'Error buscando al producto',
-         cause: generatorProductError(),
-         message: "El producto no existe" ,
-         code: EnumsError.PRODUCT_NOT_FOUND,
-       });
+      if (!prod) {
+        throw CustomError.createError({
+          name: "Error buscando al producto",
+          cause: generatorProductError(),
+          message: "El producto no existe",
+          code: EnumsError.PRODUCT_NOT_FOUND,
+        });
       }
       return await CartRepository.updateProductByCart(cid, pid);
     } catch (error) {
@@ -68,12 +97,20 @@ export default class CartController {
 
   static async updateAll(cid, data) {
     try {
-      const cart = await CartRepository.getCartById(cid)
-      if (!cart){
-       throw CustomError.createError({
-          name: 'Error buscando al carrito',
+      if (!mongoose.Types.ObjectId.isValid(cid)) {
+        throw CustomError.createError({
+          name: "Error de id del carrito",
+          cause: generatorFormatError(),
+          message: "La id no es valida",
+          code: EnumsError.INVALID_PARAMS_ERROR,
+        });
+      }
+      const cart = await CartRepository.getCartById(cid);
+      if (!cart) {
+        throw CustomError.createError({
+          name: "Error buscando al carrito",
           cause: generatorCartError(),
-          message: "El carrito no existe" ,
+          message: "El carrito no existe",
           code: EnumsError.CART_NOT_FOUND,
         });
       }
@@ -85,23 +122,39 @@ export default class CartController {
 
   static async updateOne(cid, pid, quant) {
     try {
-      const cart = await CartRepository.getCartById(cid)
-      if (!cart){
-       throw CustomError.createError({
-          name: 'Error buscando al carrito',
+      if (!mongoose.Types.ObjectId.isValid(cid)) {
+        throw CustomError.createError({
+          name: "Error de id del carrito",
+          cause: generatorFormatError(),
+          message: "La id no es valida",
+          code: EnumsError.INVALID_PARAMS_ERROR,
+        });
+      }
+      if (!mongoose.Types.ObjectId.isValid(pid)) {
+        throw CustomError.createError({
+          name: "Error de id del producto",
+          cause: generatorFormatError(),
+          message: "La id no es valida",
+          code: EnumsError.INVALID_PARAMS_ERROR,
+        });
+      }
+      const cart = await CartRepository.getCartById(cid);
+      if (!cart) {
+        throw CustomError.createError({
+          name: "Error buscando al carrito",
           cause: generatorCartError(),
-          message: "El carrito no existe" ,
+          message: "El carrito no existe",
           code: EnumsError.CART_NOT_FOUND,
         });
       }
-      if(!prod){
-       throw CustomError.createError({
-          name: 'Error buscando al producto',
+      if (!prod) {
+        throw CustomError.createError({
+          name: "Error buscando al producto",
           cause: generatorProductError(),
-          message: "El producto no existe" ,
+          message: "El producto no existe",
           code: EnumsError.PRODUCT_NOT_FOUND,
         });
-       }
+      }
       return await CartRepository.updateOne(cid, pid, quant);
     } catch (error) {
       throw error;
@@ -110,61 +163,93 @@ export default class CartController {
 
   static async deleteProductByCart(cid, pid) {
     try {
-      const cart = await CartRepository.getCartById(cid)
-      if (!cart){
-       throw CustomError.createError({
-          name: 'Error buscando al carrito',
+      if (!mongoose.Types.ObjectId.isValid(cid)) {
+        throw CustomError.createError({
+          name: "Error de id del carrito",
+          cause: generatorFormatError(),
+          message: "La id no es valida",
+          code: EnumsError.INVALID_PARAMS_ERROR,
+        });
+      }
+      if (!mongoose.Types.ObjectId.isValid(pid)) {
+        throw CustomError.createError({
+          name: "Error de id del producto",
+          cause: generatorFormatError(),
+          message: "La id no es valida",
+          code: EnumsError.INVALID_PARAMS_ERROR,
+        });
+      }
+      const cart = await CartRepository.getCartById(cid);
+      if (!cart) {
+        throw CustomError.createError({
+          name: "Error buscando al carrito",
           cause: generatorCartError(),
-          message: "El carrito no existe" ,
+          message: "El carrito no existe",
           code: EnumsError.CART_NOT_FOUND,
         });
       }
       const prod = await ProductRepository.getById(pid);
-      if(!prod){
-      throw CustomError.createError({
-         name: 'Error buscando al producto',
-         cause: generatorProductError(),
-         message: "El producto no existe" ,
-         code: EnumsError.PRODUCT_NOT_FOUND,
-       });
+      if (!prod) {
+        throw CustomError.createError({
+          name: "Error buscando al producto",
+          cause: generatorProductError(),
+          message: "El producto no existe",
+          code: EnumsError.PRODUCT_NOT_FOUND,
+        });
       }
       return await CartRepository.deleteProductByCart(cid, pid);
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 
   static async deleteAll(cid) {
     try {
-      const cart = await CartRepository.getCartById(cid)
-      if (!cart){
-       throw CustomError.createError({
-          name: 'Error buscando al carrito',
+      if (!mongoose.Types.ObjectId.isValid(cid)) {
+        throw CustomError.createError({
+          name: "Error de id del carrito",
+          cause: generatorFormatError(),
+          message: "La id no es valida",
+          code: EnumsError.INVALID_PARAMS_ERROR,
+        });
+      }
+      const cart = await CartRepository.getCartById(cid);
+      if (!cart) {
+        throw CustomError.createError({
+          name: "Error buscando al carrito",
           cause: generatorCartError(),
-          message: "El carrito no existe" ,
+          message: "El carrito no existe",
           code: EnumsError.CART_NOT_FOUND,
         });
       }
       return await CartRepository.deleteAll(cid);
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 
   static async purchase(cid) {
     try {
-      const cart = await CartRepository.getCartById(cid)
-      if (!cart){
-      throw  CustomError.createError({
-          name: 'Error buscando al carrito',
+      if (!mongoose.Types.ObjectId.isValid(cid)) {
+        throw CustomError.createError({
+          name: "Error de id del carrito",
+          cause: generatorFormatError(),
+          message: "La id no es valida",
+          code: EnumsError.INVALID_PARAMS_ERROR,
+        });
+      }
+      const cart = await CartRepository.getCartById(cid);
+      if (!cart) {
+        throw CustomError.createError({
+          name: "Error buscando al carrito",
           cause: generatorCartError(),
-          message: "El carrito no existe" ,
+          message: "El carrito no existe",
           code: EnumsError.CART_NOT_FOUND,
         });
       }
       return await CartRepository.purchase(cid);
     } catch (error) {
-      throw error
+      throw error;
     }
   }
 }

@@ -1,0 +1,309 @@
+paths:
+  /api/carts:
+    get:
+      summary: Obtener todos los carritos
+      tags:
+           - Carts
+      responses:
+        '200':
+          description: Éxito
+          content:
+            application/json:
+              example:
+                - products:
+                    - product:
+                        _id: "5feb1cb5478cdd49a895a6d9"
+                        title: "Producto 1"
+                        description: "Descripción del Producto 1"
+                        price: 20.0
+                        code: "P001"
+                        stock: 100
+                        category: "Electrónicos"
+                      quantity: 2
+                    - product:
+                        _id: "5feb1cb5478cdd49a895a6da"
+                        title: "Producto 2"
+                        description: "Descripción del Producto 2"
+                        price: 30.0
+                        code: "P002"
+                        stock: 50
+                        category: "Ropa"
+                      quantity: 1
+    post:
+      summary: Crear un nuevo carrito
+      tags:
+           - Carts
+      responses:
+        '201':
+          description: Carrito creado exitosamente
+          content:
+            application/json:
+              example:
+                status: "success"
+                message: "Nuevo carrito creado"
+
+  /api/carts/{cid}:
+    get:
+      summary: Obtener detalles de un carrito por ID
+      tags:
+           - Carts
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Éxito
+          content:
+            application/json:
+              example:
+                products:
+                  - product:
+                      _id: "5feb1cb5478cdd49a895a6d9"
+                      title: "Producto 1"
+                      description: "Descripción del Producto 1"
+                      price: 20.0
+                      code: "P001"
+                      stock: 100
+                      category: "Electrónicos"
+                    quantity: 2
+                  - product:
+                      _id: "5feb1cb5478cdd49a895a6da"
+                      title: "Producto 2"
+                      description: "Descripción del Producto 2"
+                      price: 30.0
+                      code: "P002"
+                      stock: 50
+                      category: "Ropa"
+                    quantity: 1
+
+    put:
+      summary: Actualizar todos los productos en un carrito por ID
+      tags:
+           - Carts
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/CartUpdate"
+      responses:
+        '200':
+          description: Éxito
+          content:
+            application/json:
+              example:
+                status: "success"
+                message: "Carrito actualizado"
+
+    delete:
+      summary: Eliminar un carrito por ID
+      tags:
+           - Carts
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Éxito
+          content:
+            application/json:
+              example:
+                status: "success"
+                message: "Carrito eliminado"
+
+  /api/carts/{cid}/products/{pid}:
+    post:
+      summary: Agregar un producto a un carrito por ID
+      tags:
+           - Carts
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+        - in: path
+          name: pid
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Éxito
+          content:
+            application/json:
+              example:
+                status: "success"
+                message: "Producto agregado al carrito"
+
+    put:
+      summary: Actualizar un producto en un carrito por ID
+      tags:
+           - Carts
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+        - in: path
+          name: pid
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/requestBodies/ProductUpdate"
+      responses:
+        '200':
+          description: Éxito
+          content:
+            application/json:
+              example:
+                status: "success"
+                message: "Producto actualizado en el carrito"
+
+    delete:
+      summary: Eliminar un producto de un carrito por ID
+      tags:
+           - Carts
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+        - in: path
+          name: pid
+          required: true
+          description: ID del producto
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Éxito
+          content:
+            application/json:
+              example:
+                status: "success"
+                message: "Producto eliminado del carrito"
+
+  /api/carts/{cid}/purchase:
+    get:
+      summary: Realizar compra de un carrito por ID
+      tags:
+           - Carts
+      parameters:
+        - in: path
+          name: cid
+          required: true
+          description: ID del carrito
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Éxito
+          content:
+            application/json:
+              example:
+                status: "success"
+                message: "Compra realizada con éxito"
+                
+
+
+
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        _id:
+          type: string
+          description: ID del producto
+        title:
+          type: string
+          description: Título del producto
+        description:
+          type: string
+          description: Descripción del producto
+        price:
+          type: number
+          format: float
+          description: Precio del producto
+        code:
+          type: string
+          description: Código del producto
+        stock:
+          type: integer
+          description: Stock del producto
+        category:
+          type: string
+          description: Categoría del producto
+    ProductItem:
+      type: object
+      properties:
+        product:
+          $ref: '#/components/schemas/Product'
+        quantity:
+          type: number
+          description: Cantidad del producto en el carrito
+    Cart:
+      type: object
+      properties:
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductItem'
+                  
+
+requestBodies:
+  CartUpdate:
+    description: Actualización de productos en un carrito
+    required: true
+    content:
+      application/json:
+        schema:
+          type: object
+          properties:
+            products:
+              type: array
+              items:
+                type: object
+                properties:
+                  product:
+                    type: object
+                    properties:
+                      _id:
+                        type: string
+                        description: ID del producto
+                      quantity:
+                        type: integer
+                        description: Cantidad del producto en el carrito
+
+                
+
+        
+
+                      
+    

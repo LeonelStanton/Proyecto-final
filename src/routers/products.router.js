@@ -70,7 +70,7 @@ router.put(
       await ProductManager.updateById(pid, body);
       req.logger.info(`Actualización exitosa del producto con ID ${pid}`);
       res
-        .status(204)
+        .status(200)
         .json({ status: "success", message: "Producto actualizado" });
     } catch (error) {
       req.logger.error(`Error al actualizar el producto: ${error.message}`);
@@ -90,7 +90,7 @@ router.delete(
       await ProductManager.deleteById(pid);
       req.logger.info(`Eliminación exitosa del producto con ID ${pid}`);
       res
-        .status(201)
+        .status(200)
         .json({ status: "success", message: "Producto Eliminado" });
     } catch (error) {
       req.logger.error(`Error al eliminar el producto: ${error.message}`);
