@@ -99,7 +99,12 @@ export default class CartDAO {
           code: EnumsError.PRODUCT_INCART_NF,
         });
       } else {
+        if (quant!=0){
         cart.products[productIndex].quantity = quant.quantity;
+        }
+        else{
+          CartDAO.deleteProductByCart(cid,pid)
+        }
       }
 
       await cart.save();

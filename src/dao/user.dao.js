@@ -1,9 +1,21 @@
 // user.dao.js
+import userModel from '../models/user.model.js';
 import UserModel from '../models/user.model.js';
 import { createHash } from '../utils/auth.utils.js';
 import { NotFoundException, ServerException } from '../utils/utils.js';
 
 export default class UserDAO {
+
+ static async findAll() {
+  try{
+    const allUsers = UserModel.find();
+    return allUsers
+  } catch (error) {
+    throw new ServerException('Error al buscar usuario por correo');
+  }
+}
+
+
   static async findByEmail(email) {
     try {
       return await UserModel.findOne({ email }).populate({
@@ -82,6 +94,20 @@ export default class UserDAO {
       });
     } catch (error) {
       throw new ServerException('Error al buscar usuario por ID con carrito poblado');
+    }
+  }
+
+  static async deleteById(userId) {
+    try {
+      const user= await UserModel.findById(userId);
+     /* if (!product) {
+        throw new NotFoundException('No existe el producto');
+      } */
+      const criteria = { _id: userId };
+      await UserModel.deleteOne(criteria);
+      console.log('Usuario eliminado correctamente ');
+    } catch (error) {
+      throw new ServerException('Error al eliminar el usuario');
     }
   }
 }

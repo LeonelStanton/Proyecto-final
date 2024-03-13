@@ -1,4 +1,6 @@
 import ProductRepository from "../repositories/product.repository.js";
+import UserRepository from "../repositories/user.repository.js";
+import CartRepository from "../repositories/cart.repository.js";
 import { ServerException } from "../utils/utils.js";
 import { CustomError } from "../errors/custom.error.js";
 import mongoose from "mongoose";
@@ -7,6 +9,7 @@ import {
   generatorProductError,
   generatorFormatError,
 } from "../errors/cause.error.message.js";
+import EmailService from '../utils/email.utils.js';
 import EnumsError from "../errors/enums.error.js"; // Import your Exception class
 
 export default class ProductController {
@@ -113,7 +116,39 @@ export default class ProductController {
           code: EnumsError.PRODUCT_NOT_FOUND,
         });
       }
-      return await ProductRepository.deleteById(productId);
+      const users = await UserRepository.findAll();
+        
+      for (let user of users) {
+          // Verifica si el usuario tiene un carrito
+          if (user.cart) {
+              let cart = await CartRepository.getCartById(user.cart._id);
+             
+              if (cart && cart.products) {
+                  const productIndex = cart.products.findIndex((p) => p.product._id.equals(productId));
+                  
+                  if (productIndex !== -1) {
+                      // Eliminar el producto del carrito
+                      
+                      
+                      // Envía el correo electrónico al usuario
+                      await EmailService.sendEmail(
+                          `${user.email}`,
+                          'Product deleted from ecommerce',
+                          `
+                          <div>
+                              <h1>Hi how are you?</h1>
+                              <b>Your product ${prod.title} has been deleted</b>
+                          </div>
+                          `,
+                      );
+                      console.log(cart._id.toString())
+                      console.log(productId)
+                      await CartRepository.deleteProductByCart(cart._id, productId)
+                  }
+              }
+          }
+       // return await ProductRepository.deleteById(productId);
+        }
     } catch (error) {
       throw error;
     }

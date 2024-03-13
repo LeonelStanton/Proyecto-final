@@ -23,9 +23,10 @@ router.get("/carts/:cid", async (req, res, next) => {
     } = req;
 
     const cart = await CartManager.getCartById(cid);
+    
     const array = cart.products.map((doc) => doc.toObject());
     req.logger.info(`Obtención exitosa del carrito con ID ${cid}`);
-    res.status(200).render("cart", { products: array });
+    res.status(200).render("cart", { products: array, cid });
   } catch (error) {
     req.logger.error(`Error al obtener el carrito: ${error.message}`);
     next(error);
@@ -45,7 +46,7 @@ router.post("/carts", async (req, res, next) => {
 
 router.post(
   "/carts/:cid/products/:pid",
-  authMiddleware("jwt", ["user"]),
+  authMiddleware("jwt", ["user","premium"]),
   async (req, res, next) => {
     try {
       const { cid, pid } = req.params;
@@ -78,7 +79,7 @@ router.put("/carts/:cid", async (req, res, next) => {
   }
 });
 
-router.put("/carts/:cid/products/:pid", async (req, res, next) => {
+router.put("/carts/:cid/products/:pid",authMiddleware("jwt", ["user","premium"]), async (req, res, next) => {
   try {
     const {
       params: { cid, pid },
@@ -126,7 +127,7 @@ router.delete("/carts/:cid", async (req, res, next) => {
 
 router.get(
   "/carts/:cid/purchase",
-  authMiddleware("jwt", ["user"]),
+  authMiddleware("jwt", ["user","premium"]),
   async (req, res, next) => {
     try {
       const {
@@ -134,7 +135,17 @@ router.get(
       } = req;
       const ticket = await CartManager.purchase(cid);
       req.logger.info(`Compra exitosa del carrito ${cid}`);
-      res.status(200).json(ticket);
+     // res.status(200).json(ticket);
+    // console.log(ticket)
+     const formattedTicket = {
+      amount: ticket.amount,
+      purchaser: ticket.purchaser,
+      code: ticket.code,
+      createdAt: ticket.createdAt.toISOString(), // Formatear fecha
+       // Convertir ObjectId a cadena
+    };
+
+    res.status(200).render("ticket", { ticket: formattedTicket});
     } catch (error) {
       req.logger.error(`Error al realizar la compra del carrito: ${error.message}`);
       next(error);

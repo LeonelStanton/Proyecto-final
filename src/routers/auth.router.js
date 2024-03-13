@@ -30,18 +30,6 @@ router.post('/auth/login', async (req, res, next) => {
   }
 });
 
-router.put('/user/:uid/cart/:cid', authMiddleware('jwt', ['admin']), async (req, res, next) => {
-  try {
-      
-      await UserController.updateUser(req, res);
-      // Log de nivel info para actualización exitosa del usuario
-      req.logger.info('Actualización exitosa del usuario');
-  } catch (error) {
-      // Log de nivel error en caso de fallo en la actualización del usuario
-      req.logger.error(`Error durante la actualización del usuario: ${error.message}`);
-      next(error); // Pasar el error al middleware de manejo de errores
-  }
-});
 
 router.get('/current', authMiddleware('jwt', ['user']), async (req, res, next) => {
   try {

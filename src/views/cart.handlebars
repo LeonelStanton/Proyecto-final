@@ -1,6 +1,8 @@
  <div>
+  
     {{#if products}}
-    <h1 class="title">Productos en el carrito</h1>
+    <h1 class="title" data-cart-id="{{cid}}" >Productos en el carrito</h1>
+    
     {{#each products}}
      <article>
       <h2>{{this.product.title}}</h2>
@@ -10,9 +12,21 @@
       <p><b>Stock:</b> {{this.product.stock}}</p>
       <p><b>Category:</b> {{this.product.category}}</p>
       <p><b>Cantidad:</b> {{this.quantity}}</p>
+      <p><b>Cantidad:</b> {{this.product._id}}</p>
+      
+      
+      <button class="deleteButton"  data-product-id="{{this.product._id}}">Eliminar</button>
+      </div>
     </article>
     {{/each}}
+    <div class="grid">
+     <button class="contrast"><a href="/products">Seguir comprando</a></button>
+    <button id="purchaseButton">Comprar Carrito</button>
+     </div>
     {{else}}
     <h1>El carrito no tiene productos</h1>
+    <button class="contrast"><a href="/products">Ir a Comprar</a></button>
     {{/if}}
+
 </div>
+<script src="/js/carts.js"></script>

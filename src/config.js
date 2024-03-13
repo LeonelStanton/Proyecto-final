@@ -28,4 +28,6 @@ export default {
   jwtSecret: process.env.JWT_SECRET,
   cookieLifeTime: process.env.COOKIE_LIFETIME,
   cookieSecret: process.env.COOKIE_SECRET,
+  userEmail: process.env.GMAIL_USER,
+  userPass: process.env.GMAIL_PASS,
 }

@@ -147,6 +147,7 @@ export default class CartController {
           code: EnumsError.CART_NOT_FOUND,
         });
       }
+      const prod = await ProductRepository.getById(pid);
       if (!prod) {
         throw CustomError.createError({
           name: "Error buscando al producto",

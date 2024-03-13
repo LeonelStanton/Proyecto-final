@@ -46,7 +46,7 @@ router.get("/products/:pid", async (req, res, next) => {
   }
 });
 
-router.post("/products", authMiddleware("jwt", ["admin"]), async (req, res, next) => {
+router.post("/products", authMiddleware("jwt", ["admin", "premium"]), async (req, res, next) => {
   try {
     const { body } = req;
     const product = await ProductManager.create(body);

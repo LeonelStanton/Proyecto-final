@@ -2,16 +2,21 @@
   <header>
     <h1>Bienvenido</h1>
   </header>
- {{#if user}}
+ {{#if isAdmin}}
     <p id="user-rol">Role: ADMIN ACCOUNT</p>
+    <button  class="contrast" id="user-management"><a href="api/users">USER MANAGEMENT</a></button>   
 {{else}}
-    <p id="user-rol">Role: USER ACCOUNT</p>
-{{/if}}
+<div>
+    <p id="user-rol">Role: {{user.role}} </p>
+  <button class="contrast" ><a href="api/carts/{{user.cart._id}}" data-cart-id="{{user.cart._id}}">Your cart</a></button>
   <p>Nombre: {{user.first_name}}</p>
   <p>Apellido: {{user.last_name}}</p>
   <p>Correo: {{user.email}}</p>
+  <p>Edad: {{user.age}}</p>
+</div>
+
   <footer>
-    <a href="/api/sessions/logout" role="button">Logout</a>
+    <a href="/login" role="button">Logout</a>
   </footer>
 </article>
 
@@ -30,10 +35,6 @@
   <a href="http://localhost:8080/products?limit={{limit}}&page={{page}}{{#if category}}&category={{category}}{{/if}}{{#if stock}}&stock={{stock}}{{/if}}&sort=asc" role="button">Agregar ordenamiento</a>
 {{/if}}
 </div>
-<button id="createCartBtn" class="outline">Crear Carrito</button>
-<button id="cartIcon"  class="contrast">
-  Carrito
-</button>
 </div>
 <table id="main" role="grid">
 <thead>
@@ -55,7 +56,7 @@
       <td>{{this.price}}</td>
       <td>{{this.stock}}</td>
       <td>{{this.category}}</td>
-    <td> <a href="#" role="button" class="outline addToCart" data-product="{{json this}}">Add to Cart</a></td>
+    <td> <a href="#" role="button" class="outline addToCart"  data-product="{{json this}}">Add to Cart</a></td>
     </tr>
     </tbody>
   {{/each}}
@@ -66,4 +67,6 @@
 
 <a href="{{prevLink}}" role="button" {{#unless hasPrevPage}}disabled{{/unless}} >Anterior</a>
 <a href="{{nextLink}}" role="button" {{#unless hasNextPage}}disabled{{/unless}} >Siguiente</a>
-<script src="/js/cart.js"></script>
+{{/if}}
+  
+<script src="/js/products.js"></script>

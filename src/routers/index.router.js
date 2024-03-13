@@ -5,7 +5,7 @@ import { authMiddleware } from '../middlewares/auth.middleware.js';
 
 const router = Router();
 
-router.get("/products", async (req, res) => {
+router.get("/products",authMiddleware("jwt", ["user", "admin", "premium"]), async (req, res) => {
   try {
     const { page = 1, limit = 10, category, stock, sort } = req.query;
     const opts = { page, limit };
@@ -20,12 +20,18 @@ router.get("/products", async (req, res) => {
     }
 
     const result = await ProductModel.paginate(criteria, opts);
-
+    let isAdmin = false
+      if (req.user.role === 'admin') {
+          isAdmin = true
+      }
+      
     res.render("products", {
+     user: req.user,
       category,
       limit,
       stock,
       sort,
+      isAdmin,
       ...buildResponse({ ...result, category, stock, sort }),
     });
   } catch (error) {

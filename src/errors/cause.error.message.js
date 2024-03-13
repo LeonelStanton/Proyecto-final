@@ -29,6 +29,11 @@ export const generatorUserError = (user) => {
     return `Se debe enviar un usuario valido 😱.
      `;
    } 
+
+   export const generatorUsersError = () => {
+    return `Se deben enviar usuarios validos 😱.
+     `;
+   } 
    
   export const generatorUserIdError = (id) => {
    return `Se debe enviar un identificador valido 😱.

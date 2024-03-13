@@ -7,6 +7,7 @@ import swaggerUi from 'swagger-ui-express';
 import path from 'path';
 import { init as initPassport } from './config/passport.config.js';
 import productsRouter from './routers/products.router.js';
+import usersRouter from './routers/users.router.js';
 import cartRouter from './routers/carts.router.js';
 import indexRouter from './routers/index.router.js';
 import authRouter from './routers/auth.router.js';
@@ -63,7 +64,7 @@ app.engine('handlebars', hbs.engine);
 app.set('view engine', 'handlebars');
 
 app.use('/', indexRouter);
-app.use('/api', productsRouter, cartRouter,authRouter);
+app.use('/api', productsRouter, cartRouter,authRouter, usersRouter);
 app.use('/api/docs', swaggerUi.serve, swaggerUi.setup(specs));
 
 

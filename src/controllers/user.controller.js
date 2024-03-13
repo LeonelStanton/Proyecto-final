@@ -2,9 +2,11 @@
 import UserRepository from "../repositories/user.repository.js";
 import CartRepository from "../repositories/cart.repository.js";
 import { CustomError } from '../errors/custom.error.js'; 
-import { generatorUserError, generatorEmailError, generatorLoginError, generatorLogin2Error, generatorCurrentError } from '../errors/cause.error.message.js';
+import UserGeneralDTO from "../dto/userGeneral.dto.js";
+import { generatorFormatError, generatorUsersError, generatorUserError, generatorEmailError, generatorLoginError, generatorLogin2Error, generatorCurrentError } from '../errors/cause.error.message.js';
 import EnumsError from '../errors/enums.error.js';
 import config from "../config.js";
+import mongoose from "mongoose";
 import { isValidPassword, tokenGenerator } from "../utils/auth.utils.js";
 
 export default class UserController {
@@ -89,7 +91,11 @@ export default class UserController {
         maxAge: cookieTime,
         httpOnly: true,
         signed: true,
-      }).status(200).json({ status: "success" });
+      });
+      
+      return res.redirect('/products')
+     
+
     } catch (error) {
       // Aquí podrías agregar más lógica de manejo de errores si es necesario
       throw error;
@@ -118,6 +124,29 @@ export default class UserController {
     }
   }
 
+  static async getAllUsers() {
+    try {              
+        const users = await UserRepository.findAll();
+        if (!users) {            
+          throw CustomError.createError({
+            name: 'Error de current',
+            cause: generatorUsersError(),
+            message: "Usuarios no encontrados" ,
+            code: EnumsError.USER_NOT_FOUND,
+          });
+        }
+        
+        const usersDTO = users.map(user => UserGeneralDTO.mapToGeneralDTO(user))  
+            
+        return usersDTO;
+
+    } catch (error) {
+        throw error
+    }
+    
+};
+
+
   static async getCurrentUser(req, res) {
     try {
       const user = await UserRepository.findByEmail(req.user.email);
@@ -133,6 +162,61 @@ export default class UserController {
      
       const userDto = UserRepository.mapToDTO(user);
       res.status(200).json(userDto);
+    } catch (error) {
+      throw error;
+    }
+  }
+ 
+  static async changeUserRole(userId) {
+    try {
+        // Implementa la lógica para cambiar el rol del usuario aquí
+        // Por ejemplo, puedes obtener el usuario y actualizar su propiedad 'role'
+        if (!mongoose.Types.ObjectId.isValid(userId)) {
+          throw CustomError.createError({
+            name: "Error de id del usuario",
+            cause: generatorFormatError(),
+            message: "La id no es valida",
+            code: EnumsError.INVALID_PARAMS_ERROR,
+          });
+        }
+        const user = await UserRepository.findById(userId);
+      if (!user) {
+        throw CustomError.createError({
+          name: 'Error de usuario',
+          cause: generatorCurrentError(),
+          message: "Usuario no encontrado" ,
+          code: EnumsError.USER_NOT_FOUND,
+        });
+      }
+        if (user) {
+            user.role = (user.role === 'user') ? 'premium' : 'user';
+            await user.save();
+        } 
+    } catch (error) {
+        throw error;
+    }
+}
+
+  static async deleteById(userId) {
+    try {
+      if (!mongoose.Types.ObjectId.isValid(userId)) {
+        throw CustomError.createError({
+          name: "Error de id del usuario",
+          cause: generatorFormatError(),
+          message: "La id no es valida",
+          code: EnumsError.INVALID_PARAMS_ERROR,
+        });
+      }
+      const user = await UserRepository.findById(userId);
+      if (!user) {
+        throw CustomError.createError({
+          name: 'Error de usuario',
+          cause: generatorCurrentError(),
+          message: "Usuario no encontrado" ,
+          code: EnumsError.USER_NOT_FOUND,
+        });
+      }
+      return await UserRepository.deleteById(userId);
     } catch (error) {
       throw error;
     }

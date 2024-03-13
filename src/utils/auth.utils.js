@@ -12,14 +12,16 @@ export const isValidPassword = (password, user) =>
   bcrypt.compareSync(password, user.password);
 
 export const tokenGenerator = (user) => {
-  const { _id, first_name, last_name, email, role } = user;
+  const { _id, first_name, last_name, email, role, age, cart } = user;
 
   const payload = {
     id: _id,
     first_name,
     last_name,
     email,
+    age,
     role,
+    cart,
   };
 
   return jwt.sign(payload, JWT_SECRET, { expiresIn: config.jwtLifeTime });
