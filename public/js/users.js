@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function deleteUser(userId) {
     // Realiza una solicitud al servidor para eliminar el usuario con el ID proporcionado
     // Puedes utilizar Fetch, Axios, u otra biblioteca para hacer la solicitud
-    fetch(`api/users/${userId}`, {
+    fetch(`/api/users/${userId}`, {
       method: "DELETE",
       headers: {
         "Content-Type": "application/json",
@@ -29,7 +29,7 @@ document.addEventListener("DOMContentLoaded", function () {
     // Implementa la lógica para cambiar el rol del usuario aquí
     // Realiza una solicitud al servidor para actualizar el rol del usuario
     // Puedes utilizar Fetch, Axios, u otra biblioteca para hacer la solicitud
-    fetch(`api/users/${userId}/change-role`, {
+    fetch(`/api/users/${userId}/change-role`, {
       method: "PUT", // Utiliza el método HTTP PATCH para actualizar el rol
       headers: {
         "Content-Type": "application/json",
@@ -53,7 +53,7 @@ document.addEventListener("DOMContentLoaded", function () {
   function renderUserList() {
     // Realiza una solicitud al servidor para obtener la lista actualizada de usuarios
     // Puedes utilizar Fetch, Axios, u otra biblioteca para hacer la solicitud
-    fetch("api/user")
+    fetch("/api/user")
       .then((response) => response.json())
       .then((users) => {
         // Renderiza la lista de usuarios nuevamente en el DOM

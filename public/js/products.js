@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const product = JSON.parse(productJson);
      
 
-      fetch(`api/carts/${cartId}/products/${product._id}`, {
+      fetch(`/api/carts/${cartId}/products/${product._id}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

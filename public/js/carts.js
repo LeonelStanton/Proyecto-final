@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 try {
                     console.log('mira',cartId)
                     console.log('product',productId)
-                    const response = await fetch(`api/carts/${cartId}/products/${productId}`, {
+                    const response = await fetch(`/api/carts/${cartId}/products/${productId}`, {
                         method: 'DELETE',
                     });
     
