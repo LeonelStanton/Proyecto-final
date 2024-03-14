@@ -19,7 +19,7 @@ if (process.env.NODE_ENV !== 'production') {
 dotenv.config({ path: pathEnvFile });
 
 export default {
-  port: process.env.PORT,
+  port: process.env.PORT || 8080,
   env: process.env.ENV,
   db: {
     mongodbUri: process.env.MONGO_URL,
