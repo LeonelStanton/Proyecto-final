@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const cartId = titleElement.dataset.cartId;
 
         // Redireccionar a la ruta de compra del carrito
-        window.location.href = `http://localhost:8080/api/carts/${cartId}/purchase`;
+        window.location.href = `/api/carts/${cartId}/purchase`;
     });
     
         const deleteButtons = document.querySelectorAll('.deleteButton');
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 try {
                     console.log('mira',cartId)
                     console.log('product',productId)
-                    const response = await fetch(`http://localhost:8080/api/carts/${cartId}/products/${productId}`, {
+                    const response = await fetch(`api/carts/${cartId}/products/${productId}`, {
                         method: 'DELETE',
                     });
     
