@@ -13,7 +13,7 @@ document.addEventListener('DOMContentLoaded', function () {
       const cartLink = document.querySelector('button a[data-cart-id]');
       const cartId = cartLink.dataset.cartId;
     
-      console.log('ID del carrito:', cartId);
+      //console.log('ID del carrito:', cartId);
       const product = JSON.parse(productJson);
      
 
@@ -25,7 +25,7 @@ document.addEventListener('DOMContentLoaded', function () {
       })
         .then(response => response.json())
         .then(data => {
-          console.log(data);
+          //console.log(data);
         })
         .catch(error => {
           console.error('Error:', error);

@@ -2,6 +2,7 @@
 import CartDAO from "../dao/cart.dao.js";
 import UserDAO from "../dao/user.dao.js";
 import TicketDAO from "../dao/ticket.dao.js";
+import EmailService from '../utils/email.utils.js';
 import { v4 as uuidv4 } from "uuid";
 import { ServerException } from "../utils/utils.js";
 
@@ -101,6 +102,19 @@ export default class CartRepository {
       }
 
       if (unavailableProducts.length === 0) {
+        const formattedDate = new Date(ticket.createdAt).toLocaleString('en-US', { timeZone: 'UTC' });
+        await EmailService.sendEmail(
+          `${user.email}`,
+          'Congratulations for you purchase',
+          `
+          <div>
+          <h2>Information:</h2>
+          <p>Code: <b>${ticket.code}</b></p>
+          <p>Amount: <b> ${ticket.amount}</b></p>
+          <p>Date: <b>${formattedDate}</b></p>
+          </div>
+          `,
+          );
         return ticket;
       } else {
         cart.products = unavailableProducts;

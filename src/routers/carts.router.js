@@ -141,7 +141,7 @@ router.get(
       amount: ticket.amount,
       purchaser: ticket.purchaser,
       code: ticket.code,
-      createdAt: ticket.createdAt.toISOString(), // Formatear fecha
+      createdAt: new Date(ticket.createdAt).toLocaleString('en-US', { timeZone: 'UTC' }), // Formatear fecha
        // Convertir ObjectId a cadena
     };
 
